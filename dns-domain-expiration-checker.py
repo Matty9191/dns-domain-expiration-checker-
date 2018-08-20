@@ -98,6 +98,8 @@ def parse_whois_data(whois_data):
 
     for line in whois_data.splitlines():
         if any(expire_string in line for expire_string in EXPIRE_STRINGS):
+            if line.partition(": ")[2] == "":
+                continue
             expiration_date = dateutil.parser.parse(line.partition(": ")[2], ignoretz=True)
 
         if any(registrar_string in line for registrar_string in
