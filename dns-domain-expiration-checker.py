@@ -35,7 +35,8 @@ EXPIRE_STRINGS = [ "Registry Expiry Date:",
                    "Registrar Registration Expiration Date:",
                    "expire:",
                    "expires:",
-                   "Expiry date"
+                   "Expiry date",
+                   "Expire Date:"
                  ]
 
 REGISTRAR_STRINGS = [
