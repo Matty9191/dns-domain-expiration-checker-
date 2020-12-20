@@ -21,8 +21,13 @@ import smtplib
 import dateutil.parser
 import subprocess
 from datetime import datetime
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
+
+if int(sys.version[0]) >= 3:
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+else:
+    from email.MIMEMultipart import MIMEMultipart
+    from email.MIMEText import MIMEText
 
 EXPIRE_STRINGS = [ "Registry Expiry Date:",
                    "Expiration:",
@@ -30,7 +35,8 @@ EXPIRE_STRINGS = [ "Registry Expiry Date:",
                    "Registrar Registration Expiration Date:",
                    "expire:",
                    "expires:",
-                   "Expiry date"
+                   "Expiry date",
+                   "Expire Date:"
                  ]
 
 REGISTRAR_STRINGS = [
@@ -100,6 +106,7 @@ def parse_whois_data(whois_data):
     registrar = "Unknown"
 
     for line in whois_data.splitlines():
+        line = str(line)
         if any(expire_string in line for expire_string in EXPIRE_STRINGS):
             expiration_date = dateutil.parser.parse(line.partition(": ")[2], ignoretz=True)
 
@@ -122,10 +129,7 @@ def calculate_expiration_days(expire_days, expiration_date):
         print("Unable to calculate the expiration days")
         sys.exit(1)
 
-    if domain_expire.days < expire_days:
-        return domain_expire.days
-    else:
-        return 0
+    return domain_expire.days
 
 
 def check_expired(expiration_days, days_remaining):
@@ -239,7 +243,7 @@ def main():
         # Need to wait between queries to avoid triggering DOS measures like so:
         # Your IP has been restricted due to excessive access, please wait a bit
         time.sleep(conf_options["sleeptime"])
- 
+
 
 if __name__ == "__main__":
     main()
