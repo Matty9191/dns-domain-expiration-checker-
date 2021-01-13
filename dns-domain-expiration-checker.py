@@ -30,11 +30,13 @@ EXPIRE_STRINGS = [ "Registry Expiry Date:",
                    "Registrar Registration Expiration Date:",
                    "expire:",
                    "expires:",
-                   "Expiry date"
+                   "Expiry date",
+                   "Expiration Date:"
                  ]
 
 REGISTRAR_STRINGS = [
-                      "Registrar:"
+                      "Registrar:",
+                      "Sponsoring Registrar Organization:"
                     ]
 
 DEBUG = 0
@@ -101,11 +103,11 @@ def parse_whois_data(whois_data):
 
     for line in whois_data.splitlines():
         if any(expire_string in line for expire_string in EXPIRE_STRINGS):
-            expiration_date = dateutil.parser.parse(line.partition(": ")[2], ignoretz=True)
+            expiration_date = dateutil.parser.parse(line.partition(":")[2].strip(), ignoretz=True)
 
         if any(registrar_string in line for registrar_string in
                REGISTRAR_STRINGS):
-            registrar = line.split("Registrar:")[1].strip()
+            registrar = line.split(":")[1].strip()
 
     return expiration_date, registrar
 
