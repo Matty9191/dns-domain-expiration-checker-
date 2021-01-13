@@ -181,8 +181,9 @@ def processcli():
 
     parser.add_argument('--domainfile', help="Path to file with list of domains and expiration intervals.")
     parser.add_argument('--domainname', help="Domain to check expiration on.")
-    parser.add_argument('--email', action="store_true", help="Enable debugging output.")
-    parser.add_argument('--interactive',action="store_true", help="Enable debugging output.")
+    parser.add_argument('--email', action="store_true", help="Send email when domain will expire within threshold.")
+    parser.add_argument('--interactive',action="store_true", help="Print to STDOUT details about domain(s).")
+    parser.add_argument('--debug',action="store_true", help="Enable debugging output.")
     parser.add_argument('--expiredays', default=10000, type=int, help="Expiration threshold to check against.")
     parser.add_argument('--sleeptime', default=60, type=int, help="Time to sleep between whois queries.")
     parser.add_argument('--smtpserver', default="localhost", help="SMTP server to use.")
@@ -200,6 +201,8 @@ def main():
     """
     days_remaining = 0
     conf_options = processcli()
+    global DEBUG
+    DEBUG = conf_options["debug"]
 
     if conf_options["interactive"]:
         print_heading()
