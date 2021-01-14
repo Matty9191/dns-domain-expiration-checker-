@@ -120,7 +120,8 @@ def calculate_expiration_days(expire_days, expiration_date):
         domain_expire = expiration_date - datetime.now()
     except:
         print("Unable to calculate the expiration days")
-        sys.exit(1)
+        return 999999
+        #sys.exit(1)
 
     if domain_expire.days < expire_days:
         return domain_expire.days
@@ -168,7 +169,7 @@ def send_expire_email(domain, days, config_options):
 
     smtp_connection = smtplib.SMTP(config_options["smtpserver"],config_options["smtpport"])
     message = msg.as_string()
-    smtp_connection.sendmail(config_options["smtpfrom"], config_options["smtpto"], message)
+    smtp_connection.sendmail(config_options["smtpfrom"], config_options["smtpto"].split(","), message)
     smtp_connection.quit()
 
 
